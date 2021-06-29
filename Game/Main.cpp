@@ -1,18 +1,26 @@
-#include "Helper.h"
-#include "Dynamic.h"
+#include "core.h"
 #include <iostream>
 
 using namespace std;
 
+bool Update(float dt) {
+	return false;
+}
+
+void Draw(Core::Graphics& graphics) {
+	//graphics.SetBackgroundColor(RGB(rand() % 256, rand() % 256, rand() % 256));
+	for (int i = 0; i < 1000; i++) {
+		graphics.SetColor(RGB(rand() % 256, rand() % 256, rand() % 256));
+		graphics.DrawLine(static_cast<float>(rand() % 801), static_cast<float>(rand() % 601), static_cast<float>(rand() % 801), static_cast<float>(rand() % 601));
+	}
+}
+
 int main() {
-	cout << nc::sqr(5) << endl;
+	char name[] = "CSC196";
+	Core::Init(name, 800, 600);
+	Core::RegisterUpdateFn(Update);
+	Core::RegisterDrawFn(Draw);
 
-	nc::point p1(10, 10);
-	nc::point p2(10, 10);
-	nc::point p3 = p1 + p2;
-
-	cout << p3.x << " " << p3.y << endl;
-
-	system("pause"); //Makes the console pause until a key is pressed
-
+	Core::GameLoop();
+	Core::Shutdown();
 }
