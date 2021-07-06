@@ -18,5 +18,9 @@ namespace gn {
 
 		Vector2& operator *= (float scale) { x *= scale; y *= scale; return *this; }
 
+		static const Vector2 up;
+		static const Vector2 down;
+		static const Vector2 left;
+		static const Vector2 right;
 	};
 }

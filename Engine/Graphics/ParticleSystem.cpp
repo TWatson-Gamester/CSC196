@@ -1,16 +1,10 @@
 #include "ParticleSystem.h"
+#include "../Math/Random.h"
 
 namespace gn {
-	float random() {
-		return rand() / static_cast<float>(RAND_MAX);
-	}
-
-	float random(float min, float max) {
-		return min + (max - min) * random();
-	}
 
 	void ParticleSystem::Startup() {
-		particles.resize(1000);
+		particles.resize(10000);
 	}
 
 	void ParticleSystem::Shutdown() {
@@ -47,7 +41,7 @@ namespace gn {
 				p->prevPosition = position;
 				p->color = color;
 				
-				p->velocity = Vector2{ random(-1,1), random(-1,1) } * (speed * random());
+				p->velocity = Vector2{ RandomRange(-1,1), RandomRange(-1,1) } * (speed * Random());
 			}
 		}
 	}
