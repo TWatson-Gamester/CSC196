@@ -9,7 +9,7 @@ namespace gn {
 		Shape() {}
 		Shape(const std::vector<Vector2>& points, const Color& color) : points{points}, color{color} {}
 
-		void Draw(Core::Graphics& graphics, Vector2 position, float scale = 1);
+		void Draw(Core::Graphics& graphics, Vector2 position, float angle, float scale = 1);
 
 	private:
 		std::vector<Vector2> points;

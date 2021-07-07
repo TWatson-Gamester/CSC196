@@ -16,6 +16,8 @@ gn::Shape shape{ points, gn::Color(0,0,1) };
 const float speed = 250;
 float Time = 0;
 gn::ParticleSystem particleSystem;
+gn::Vector2 psPosition;
+float angle = 0;
 
 float deltaTime;
 float timer = 0;
@@ -29,25 +31,27 @@ bool Update(float dt) {
 	
 	Time += dt * 5;
 
-	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT)) {
-		int x, y;
-		Core::Input::GetMousePos(x, y);
-		gn::Vector2 psPosition;
-		psPosition.x = static_cast<float>(x);
-		psPosition.y = static_cast<float>(y);
+	int x, y;
+	Core::Input::GetMousePos(x, y);
+	psPosition.x = static_cast<float>(x);
+	psPosition.y = static_cast<float>(y);
 
-		vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue };
+	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT)) {
+		vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue, gn::Color::orange, gn::Color::purple, gn::Color::cyan, gn::Color::yellow };
 		particleSystem.Create(psPosition, 250, 2, colors[gn::RandomRangeInt(0,colors.size())], 150);
 	}
 	particleSystem.Update(dt);
 
-	gn::Vector2 input;
-	if (Core::Input::IsPressed('A')) input.x = -1;
-	if (Core::Input::IsPressed('D')) input.x = 1;
-	if (Core::Input::IsPressed('W')) input.y = -1;
-	if (Core::Input::IsPressed('S')) input.y = 1;
+	float thrust = 0;
+	if (Core::Input::IsPressed('A')) angle += -5 * dt;
+	if (Core::Input::IsPressed('D')) angle += 5 * dt;
+	if (Core::Input::IsPressed('W')) thrust = speed;
 
-	position += input * speed * dt;
+
+	//if (Core::Input::IsPressed('S')) input.y = 1;
+
+	position += gn::Vector2::Rotate(gn::Vector2::up, angle) * thrust * dt;
+	particleSystem.Create(position, 5, 2, gn::Color::white, 80);
 
 	return quit;
 }
@@ -60,7 +64,7 @@ void Draw(Core::Graphics& graphics) {
 		graphics.SetColor(color);
 
 		float scale = 1 + std::sin(Time) * 2;
-		shape.Draw(graphics, position);
+		shape.Draw(graphics, position, angle, 3);
 		particleSystem.Draw(graphics);
 
 		graphics.SetColor(gn::Color::white);
@@ -68,18 +72,11 @@ void Draw(Core::Graphics& graphics) {
 		graphics.DrawString(10, 20, std::to_string(timer).c_str());
 		graphics.DrawString(10, 30, std::to_string(1 / deltaTime).c_str());
 
+		graphics.DrawString(10, 40, std::to_string(psPosition.Length()).c_str());
+
 }
 
 int main() {
-
-	srand(1234);
-	cout << RAND_MAX << endl;
-	for (size_t i = 0; i < 5; i++) {
-		int r = rand();
-		cout << r << " " << r / static_cast<float>(RAND_MAX) << endl;
-	}
-	gn::Random();
-
 	char name[] = "CSC196";
 	Core::Init(name, 800, 600, 120);
 	Core::RegisterUpdateFn(Update);
