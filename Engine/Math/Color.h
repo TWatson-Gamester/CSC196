@@ -14,7 +14,11 @@ namespace gn {
 			b = ((rgb >> 16) & 0xFF) / 255.0f;	// 0 - 255 -> 0 - 1
 		}
 
+		Color operator + (const Color color) { return {r + color.r, g + color.g, b + color.b}; }
+		Color operator - (const Color color) { return {r - color.r, g - color.g, b - color.b}; }
+
 		Color operator * (float scale) const { return { r * scale, g * scale, b * scale }; }
+
 		operator DWORD() const { return ToRGB(); }
 		
 

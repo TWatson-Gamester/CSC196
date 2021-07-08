@@ -2,6 +2,7 @@
 #include "Math/Vector2.h"
 #include "Math/Color.h"
 #include "Math/Random.h"
+#include "Math/MathUtils.h"
 #include "Graphics/Shape.h"
 #include "Graphics/ParticleSystem.h"
 #include <iostream>
@@ -10,9 +11,10 @@
 
 using namespace std;
 
-gn::Vector2 position{ 400, 300 };
 vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
 gn::Shape shape{ points, gn::Color(0,0,1) };
+gn::Transform transform{ {400, 300}, 0.0f, 1.0f };
+
 const float speed = 250;
 float Time = 0;
 gn::ParticleSystem particleSystem;
@@ -50,8 +52,11 @@ bool Update(float dt) {
 
 	//if (Core::Input::IsPressed('S')) input.y = 1;
 
-	position += gn::Vector2::Rotate(gn::Vector2::up, angle) * thrust * dt;
-	particleSystem.Create(position, 5, 2, gn::Color::white, 80);
+	transform.position += gn::Vector2::Rotate(gn::Vector2::up, angle) * thrust * dt;
+	transform.position.x = gn::Clamp(transform.position.x, 0.0f, 800.0f);
+	transform.position.y = gn::Clamp(transform.position.y, 0.0f, 600.0f);
+
+	particleSystem.Create(transform.position, 5, 2, gn::Color::white, 80);
 
 	return quit;
 }
@@ -64,10 +69,12 @@ void Draw(Core::Graphics& graphics) {
 		graphics.SetColor(color);
 
 		float scale = 1 + std::sin(Time) * 2;
-		shape.Draw(graphics, position, angle, 3);
+		shape.Draw(graphics, transform);
 		particleSystem.Draw(graphics);
 
-		graphics.SetColor(gn::Color::white);
+		color = gn::Lerp(gn::Color::red, gn::Color::yellow, psPosition.x / 800);
+
+		graphics.SetColor(color);
 		graphics.DrawString(10, 10, std::to_string(deltaTime).c_str());
 		graphics.DrawString(10, 20, std::to_string(timer).c_str());
 		graphics.DrawString(10, 30, std::to_string(1 / deltaTime).c_str());

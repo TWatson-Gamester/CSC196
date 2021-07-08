@@ -1,5 +1,5 @@
 #include "ParticleSystem.h"
-#include "../Math/Random.h"
+#include "Math/Random.h"
 
 namespace gn {
 
