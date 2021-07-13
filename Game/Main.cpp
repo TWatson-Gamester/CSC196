@@ -1,10 +1,7 @@
-#include "core.h"
-#include "Math/Vector2.h"
-#include "Math/Color.h"
-#include "Math/Random.h"
-#include "Math/MathUtils.h"
-#include "Graphics/Shape.h"
-#include "Graphics/ParticleSystem.h"
+#include "Engine.h"
+#include "Actors/Player.h"
+#include "Actors/Enemy.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,13 +10,13 @@ using namespace std;
 
 vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
 gn::Shape shape{ points, gn::Color(0,0,1) };
-gn::Transform transform{ {400, 300}, 0.0f, 1.0f };
+gn::Shape shape2{ points, gn::Color(1,0,0) };
 
-const float speed = 250;
 float Time = 0;
-gn::ParticleSystem particleSystem;
 gn::Vector2 psPosition;
-float angle = 0;
+
+gn::Engine engine;
+gn::Scene scene;
 
 float deltaTime;
 float timer = 0;
@@ -40,23 +37,14 @@ bool Update(float dt) {
 
 	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT)) {
 		vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue, gn::Color::orange, gn::Color::purple, gn::Color::cyan, gn::Color::yellow };
-		particleSystem.Create(psPosition, 250, 2, colors[gn::RandomRangeInt(0,colors.size())], 150);
+		engine.Get<gn::ParticleSystem>()->Create(psPosition, 250, 2, colors[gn::RandomRangeInt(0, colors.size())], 150);
+		engine.Get<gn::AudioSystem>()->PlayAudio("explosion");
 	}
-	particleSystem.Update(dt);
-
-	float thrust = 0;
-	if (Core::Input::IsPressed('A')) angle += -5 * dt;
-	if (Core::Input::IsPressed('D')) angle += 5 * dt;
-	if (Core::Input::IsPressed('W')) thrust = speed;
+	scene.Update(dt);
+	engine.Update(dt);
 
 
-	//if (Core::Input::IsPressed('S')) input.y = 1;
-
-	transform.position += gn::Vector2::Rotate(gn::Vector2::up, angle) * thrust * dt;
-	transform.position.x = gn::Clamp(transform.position.x, 0.0f, 800.0f);
-	transform.position.y = gn::Clamp(transform.position.y, 0.0f, 600.0f);
-
-	particleSystem.Create(transform.position, 5, 2, gn::Color::white, 80);
+	//engine.Get<gn::ParticleSystem>()->Create(transform.position, 5, 2, gn::Color::white, 80);
 
 	return quit;
 }
@@ -69,8 +57,8 @@ void Draw(Core::Graphics& graphics) {
 		graphics.SetColor(color);
 
 		float scale = 1 + std::sin(Time) * 2;
-		shape.Draw(graphics, transform);
-		particleSystem.Draw(graphics);
+		scene.Draw(graphics);
+		engine.Get<gn::ParticleSystem>()->Draw(graphics);
 
 		color = gn::Lerp(gn::Color::red, gn::Color::yellow, psPosition.x / 800);
 
@@ -83,15 +71,26 @@ void Draw(Core::Graphics& graphics) {
 
 }
 
+void Init() {
+	engine.Get<gn::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	scene.AddActor(new Player{ gn::Transform{{400,300},0.0f, 1.0f}, &shape, 300.0f });
+	for (size_t i = 0; i < 20; i++) {
+		scene.AddActor(new Enemy{ gn::Transform{{400,300},gn::RandomRange(0, 800), 0.5f}, &shape2, 300.0f });
+	}
+
+}
+
 int main() {
 	char name[] = "CSC196";
 	Core::Init(name, 800, 600, 120);
 	Core::RegisterUpdateFn(Update);
 	Core::RegisterDrawFn(Draw);
 	
-	particleSystem.Startup();
+	engine.Startup();
+	Init();
 
 	Core::GameLoop();
 	Core::Shutdown();
-	particleSystem.Shutdown();
+
+	engine.Shutdown();
 }
