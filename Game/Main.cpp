@@ -9,8 +9,6 @@
 using namespace std;
 
 vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
-gn::Shape shape{ points, gn::Color(0,0,1) };
-gn::Shape shape2{ points, gn::Color(1,0,0) };
 
 float Time = 0;
 gn::Vector2 psPosition;
@@ -35,11 +33,16 @@ bool Update(float dt) {
 	psPosition.x = static_cast<float>(x);
 	psPosition.y = static_cast<float>(y);
 
+	
 	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT)) {
 		vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue, gn::Color::orange, gn::Color::purple, gn::Color::cyan, gn::Color::yellow };
 		engine.Get<gn::ParticleSystem>()->Create(psPosition, 250, 2, colors[gn::RandomRangeInt(0, colors.size())], 150);
 		engine.Get<gn::AudioSystem>()->PlayAudio("explosion");
 	}
+
+	scene.GetActor<Player>()->shape->color = gn::Color{ gn::Random(), gn::Random(), gn::Random() };
+	scene.GetActor<Enemy>()->shape->color = gn::Color{ gn::Random(), gn::Random(), gn::Random() };
+
 	scene.Update(dt);
 	engine.Update(dt);
 
@@ -72,10 +75,13 @@ void Draw(Core::Graphics& graphics) {
 }
 
 void Init() {
+	std::shared_ptr<gn::Shape> shape1 = std::make_shared<gn::Shape>( points, gn::Color(0,0,1) );
+	std::shared_ptr<gn::Shape> shape2 = std::make_shared<gn::Shape>( points, gn::Color(1,0,0) );
+
 	engine.Get<gn::AudioSystem>()->AddAudio("explosion", "explosion.wav");
-	scene.AddActor(new Player{ gn::Transform{{400,300},0.0f, 1.0f}, &shape, 300.0f });
-	for (size_t i = 0; i < 20; i++) {
-		scene.AddActor(new Enemy{ gn::Transform{{400,300},gn::RandomRange(0, 800), 0.5f}, &shape2, 300.0f });
+	scene.AddActor(std::make_unique<Player>( gn::Transform{{400,300},0.0f, 1.0f}, shape1, 300.0f ));
+	for (size_t i = 0; i < 1000; i++) {
+		scene.AddActor(std::make_unique<Enemy>( gn::Transform{{400,300},gn::RandomRange(0, 800), 0.5f}, shape2, 300.0f ));
 	}
 
 }

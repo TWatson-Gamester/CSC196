@@ -3,7 +3,7 @@
 
 class Player : public gn::Actor {
 public:
-	Player(const gn::Transform& transform, gn::Shape* shape, float speed) : gn::Actor{ transform, shape }, speed{ speed } {};
+	Player(const gn::Transform& transform, std::shared_ptr<gn::Shape> shape, float speed) : gn::Actor{ transform, shape }, speed{ speed } {};
 	void Update(float dt) override;
 
 private:

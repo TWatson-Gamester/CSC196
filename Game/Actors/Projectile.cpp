@@ -1,6 +1,6 @@
-#include "Enemy.h"
+#include "Projectile.h"
 
-void Enemy::Update(float dt) {
+void Projectile::Update(float dt) {
 
 	Actor::Update(dt);
 

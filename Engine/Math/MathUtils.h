@@ -24,6 +24,13 @@ namespace gn {
 	}
 
 	template<typename T>
+	T Wrap(T v, T min, T max) {
+		if (v < min) return max;
+		if (v > max) return min;
+		return v;
+	}
+
+	template<typename T>
 	T Lerp(T a, T b, float t) {
 		t = Clamp(t, 0.0f, 1.0f);
 		return a + ((b - a) * t);
