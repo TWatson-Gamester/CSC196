@@ -28,6 +28,8 @@ public:
 private:
 	void UpdateTitle(float dt);
 	void UpdateLevelStart(float dt);
+	void OnAddPoints(const gn::Event& event);
+	void OnPlayerDead(const gn::Event& event);
 
 public:
 	std::unique_ptr<gn::Engine> engine;

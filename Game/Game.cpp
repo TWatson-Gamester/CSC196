@@ -9,6 +9,9 @@ void Game::Initialize(){
 
 	engine->Get<gn::AudioSystem>()->AddAudio("explosion", "explosion.wav");
 	stateFunction = &Game::UpdateTitle;
+
+	engine->Get<gn::EventSystem>()->Subscribe("AddPoints", std::bind(&Game::OnAddPoints, this, std::placeholders::_1));
+	engine->Get<gn::EventSystem>()->Subscribe("PlayerDead", std::bind(&Game::OnPlayerDead, this, std::placeholders::_1));
 }
 
 void Game::Shutdown(){
@@ -76,6 +79,8 @@ void Game::Draw(Core::Graphics& graphics){
 	case Game::eState::Game:
 		break;
 	case Game::eState::GameOver:
+		graphics.SetColor(gn::Color::red);
+		graphics.DrawString(370, 300 + static_cast<int>(std::sin(stateTimer * 2) * 50), "GAME OVER");
 		break;
 	default:
 		break;
@@ -93,4 +98,13 @@ void Game::UpdateTitle(float dt){
 	if (Core::Input::IsPressed(VK_SPACE)) {
 		state = eState::StartGame;
 	}
+}
+
+void Game::OnAddPoints(const gn::Event& event){
+	score += 100;
+}
+
+void Game::OnPlayerDead(const gn::Event& event){
+	lives--;
+	state = eState::GameOver;
 }

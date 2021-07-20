@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Projectile.h"
+#include "Enemy.h"
 #include "Engine.h"
 
 void Player::Update(float dt){
@@ -28,5 +29,19 @@ void Player::Update(float dt){
 		scene->AddActor(std::make_unique<Projectile>( t, shape2, 600.0f ));
 	}
 
+}
+
+void Player::OnCollision(Actor* actor) {
+	if (dynamic_cast<Enemy*>(actor)) {
+		this->destroy = true;
+		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::orange, 150);
+		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::red, 150);
+		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::yellow, 150);
+		scene->engine->Get<gn::AudioSystem>()->PlayAudio("explosion");
+
+		gn::Event event;
+		event.name = "PlayerDead";
+		scene->engine->Get<gn::EventSystem>()->Notify(event);
+	}
 }
 

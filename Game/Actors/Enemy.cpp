@@ -20,5 +20,8 @@ void Enemy::OnCollision(Actor* actor){
 		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::yellow, 150);
 		scene->engine->Get<gn::AudioSystem>()->PlayAudio("explosion");
 
+		gn::Event event;
+		event.name = "AddPoints";
+		scene->engine->Get<gn::EventSystem>()->Notify(event);
 	}
 }

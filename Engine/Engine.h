@@ -13,9 +13,12 @@
 #include "Base/Actor.h"
 #include "Base/Scene.h"
 
+#include "Framework/EventSystem.h"
+
 #include "core.h"
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 namespace gn {
 	class Engine {

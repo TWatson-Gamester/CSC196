@@ -21,6 +21,9 @@
     <Filter Include="Source\Audio">
       <UniqueIdentifier>{bed775e2-0606-49be-bedf-88b8d502c630}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Framework">
+      <UniqueIdentifier>{9c56f7b5-d59d-4710-bb60-0fe39a98c5f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Math\Vector2.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="Base\Scene.h">
       <Filter>Source\Base</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\EventSystem.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Graphics\Shape.cpp">
@@ -88,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="Base\Scene.cpp">
       <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\EventSystem.cpp">
+      <Filter>Source\Framework</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
