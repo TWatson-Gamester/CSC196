@@ -7,6 +7,8 @@ public:
 	Enemy(const gn::Transform& transform, std::shared_ptr<gn::Shape> shape, float speed) : gn::Actor{ transform, shape }, speed{ speed } {};
 	void Update(float dt) override;
 
+	void OnCollision(Actor* actor) override;
+
 private:
 	float speed = 300;
 };

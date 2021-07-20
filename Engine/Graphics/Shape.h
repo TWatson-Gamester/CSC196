@@ -3,6 +3,7 @@
 #include "Math/Color.h"
 #include "Math/Transform.h"
 #include <vector>
+#include <string>
 
 namespace gn {
 	class Shape {
@@ -12,6 +13,8 @@ namespace gn {
 
 		void Draw(Core::Graphics& graphics, const Vector2& position, float angle, float scale = 1);
 		void Draw(Core::Graphics& graphics, const Transform& transform);
+
+		bool Load(const std::string& fileName);
 
 	public:
 		std::vector<Vector2> points;

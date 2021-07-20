@@ -1,5 +1,6 @@
 #pragma once
 #include "core.h"
+#include <iostream>
 
 namespace gn {
 	struct Color {
@@ -21,6 +22,7 @@ namespace gn {
 
 		operator DWORD() const { return ToRGB(); }
 		
+		friend std::istream& operator >> (std::istream& stream, Color& c);
 
 		DWORD ToRGB() const {
 			BYTE red = static_cast<BYTE>(r * 255);

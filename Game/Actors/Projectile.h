@@ -9,5 +9,6 @@ public:
 	void Update(float dt) override;
 
 private:
+	float lifetime{ 1 };
 	float speed = 300;
 };

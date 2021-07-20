@@ -7,5 +7,7 @@ public:
 	void Update(float dt) override;
 
 private:
+	float fireTimer{ 0 };
+	float fireRate{ .5f };
 	float speed = 300;
 };

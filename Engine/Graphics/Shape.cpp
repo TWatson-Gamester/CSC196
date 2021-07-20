@@ -1,4 +1,5 @@
 #include "Shape.h"
+#include <fstream>
 
 namespace gn {
 
@@ -19,6 +20,34 @@ namespace gn {
 			graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 
 		}
+	}
+
+	bool Shape::Load(const std::string& fileName)
+	{
+		bool success = false;
+
+		std::ifstream stream(fileName);
+		if (stream.is_open()) {
+			success = true;
+
+			gn::Color color;
+			stream >> color;
+			this->color = color;
+
+			std::string line;
+			std::getline(stream, line);
+			size_t size = std::stoi(line);
+			
+
+			for (size_t i = 0; i < size; i++) {
+				gn::Vector2 point;
+				stream >> point;
+
+				points.push_back(point);
+			}
+		}
+
+		return success;
 	}
 }
 
