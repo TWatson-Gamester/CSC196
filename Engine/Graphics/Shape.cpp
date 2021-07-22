@@ -45,9 +45,16 @@ namespace gn {
 
 				points.push_back(point);
 			}
+			ComputeRadius();
 		}
 
 		return success;
+	}
+	void Shape::ComputeRadius(){
+		for (auto& point : points) {
+			float r = point.Length();
+			if (r > radius) radius = r;
+		}
 	}
 }
 

@@ -1,7 +1,5 @@
 #include "AudioSystem.h"
 
-gn::AudioSystem audioSystem;
-
 namespace gn
 {
 	void AudioSystem::Startup()

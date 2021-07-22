@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <variant>
 
 using namespace std;
 
@@ -36,7 +37,29 @@ void Init() {
 int inc(int i) { return ++i; }
 int dec(int i) { return --i; }
 
+union Data {
+	int i;
+	char str[5];
+	bool b;
+};
+
 int main() {
+
+	Data data = { 0 };
+	data.b = true;
+	data.i = 534;
+	data.str[0] = '#';
+	cout << data.i << endl;
+	cout << data.b << endl;
+	cout << data.str << endl;
+
+	std::variant<int, std::string, float, bool> var;
+	var = 20;
+	var = true;
+
+	//cout << "Var int: " << std::get<int>(var) << endl;
+	cout << "Var bool: " << std::get<bool>(var) << endl;
+	cout << "Var bool: " << std::get<3>(var) << endl;
 
 	//int (*operation)(int);
 
@@ -47,6 +70,7 @@ int main() {
 	//operation = &dec;
 	//
 	//cout << operation(5) << endl;
+
 	//system("pause");
 
 	char name[] = "CSC196";

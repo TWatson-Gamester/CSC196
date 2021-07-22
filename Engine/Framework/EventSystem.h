@@ -4,10 +4,12 @@
 #include <map>
 #include <list>
 #include <functional>
+#include <variant>
 
 namespace gn {
 	struct Event {
 		std::string name;
+		std::variant<int, bool, float, std::string> data;
 	};
 
 	class EventSystem : public System {

@@ -10,5 +10,7 @@ public:
 	void OnCollision(Actor* actor) override;
 
 private:
+	float fireTimer{ 0 };
+	float fireRate{ 2.0f };
 	float speed = 300;
 };

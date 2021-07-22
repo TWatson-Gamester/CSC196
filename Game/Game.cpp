@@ -8,6 +8,8 @@ void Game::Initialize(){
 	scene->engine = engine.get();
 
 	engine->Get<gn::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	engine->Get<gn::AudioSystem>()->AddAudio("Player_Shot", "Player_Shot.wav");
+	engine->Get<gn::AudioSystem>()->AddAudio("Enemy_Shot", "Enemy_Shot.wav");
 	stateFunction = &Game::UpdateTitle;
 
 	engine->Get<gn::EventSystem>()->Subscribe("AddPoints", std::bind(&Game::OnAddPoints, this, std::placeholders::_1));
@@ -37,23 +39,16 @@ void Game::Update(float dt){
 		break;
 	case Game::eState::StartLevel:
 	{
-		std::shared_ptr<gn::Shape> playerShape = std::make_shared<gn::Shape>();
-		playerShape->Load("hourglassShape.txt");
-
-		std::vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
-		std::shared_ptr<gn::Shape> enemyShape = std::make_shared<gn::Shape>(points, gn::Color(1, 0, 0));
-
-
-		scene->AddActor(std::make_unique<Player>(gn::Transform{ {400,300},0.0f, 5.0f }, playerShape, 300.0f));
-		for (size_t i = 0; i < 50; i++) {
-			scene->AddActor(std::make_unique<Enemy>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 0.5f}, enemyShape, 300.0f));
-		}
-		state = eState::Game;
+		UpdateLevelStart(dt);
 	}
 		break;
 	case Game::eState::Game:
+		if (scene->GetActors<Enemy>().size() == 0) {
+			state = eState::GameOver;
+		}
 		break;
 	case Game::eState::GameOver:
+		scene->RemoveAllActors();
 		break;
 	default:
 		break;
@@ -91,7 +86,7 @@ void Game::Draw(Core::Graphics& graphics){
 	graphics.DrawString(770,20, std::to_string(lives).c_str());
 
 	scene->Draw(graphics);
-	engine->Get<gn::ParticleSystem>()->Draw(graphics);
+	engine->Draw(graphics);
 }
 
 void Game::UpdateTitle(float dt){
@@ -100,11 +95,27 @@ void Game::UpdateTitle(float dt){
 	}
 }
 
+void Game::UpdateLevelStart(float dt){ //Need to make an enemy shape an then use the ResourceSystem to add it
+
+	std::vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
+	std::shared_ptr<gn::Shape> enemyShape = std::make_shared<gn::Shape>(points, gn::Color(1, 0, 0));
+
+
+	scene->AddActor(std::make_unique<Player>(gn::Transform{ {400,300},0.0f, 5.0f }, engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("PlayerShape.txt"), 300.0f));
+	for (size_t i = 0; i < 20; i++) {
+		scene->AddActor(std::make_unique<Enemy>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 0.5f }, enemyShape, 100.0f));
+	}
+	state = eState::Game;
+}
+
 void Game::OnAddPoints(const gn::Event& event){
-	score += 100;
+	score += std::get<int>(event.data);
 }
 
 void Game::OnPlayerDead(const gn::Event& event){
 	lives--;
-	state = eState::GameOver;
+ 	std::cout << std::get<std::string>(event.data) << std::endl;
+	if (lives <= 0) {
+		state = eState::GameOver;
+	}
 }

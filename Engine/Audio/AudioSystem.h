@@ -23,5 +23,3 @@ namespace gn
 		std::map<std::string, FMOD::Sound*> sounds;
 	};
 }
-
-extern gn::AudioSystem audioSystem;
