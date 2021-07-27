@@ -17,6 +17,8 @@ void Player::Update(float dt){
 	transform.position.x = gn::Clamp(transform.position.x, 0.0f, 800.0f);
 	transform.position.y = gn::Clamp(transform.position.y, 0.0f, 600.0f);
 
+
+
 	//Fire
 	fireTimer -= dt;
 	if (fireTimer <= 0 && Core::Input::IsPressed(VK_SPACE)) {
@@ -33,6 +35,8 @@ void Player::Update(float dt){
 		projectile->tag = "Player";
 		scene->AddActor(std::move(projectile));
 	}
+
+	transform.Update();
 
 }
 
