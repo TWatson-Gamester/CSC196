@@ -3,6 +3,16 @@
 #include "Enemy.h"
 #include "Engine.h"
 
+Player::Player(const gn::Transform& transform, std::shared_ptr<gn::Shape> shape, float speed) : gn::Actor{ transform,shape }, speed{ speed } {
+	std::unique_ptr locator = std::make_unique<Actor>();
+	locator->transform.localPosition = gn::Vector2{ 8,0 };
+	AddChild(std::move(locator));
+
+	locator = std::make_unique<Actor>();
+	locator->transform.localPosition = gn::Vector2{ 0,5 };
+	AddChild(std::move(locator));
+}
+
 void Player::Update(float dt){
 
 	Actor::Update(dt);
@@ -29,14 +39,12 @@ void Player::Update(float dt){
 		std::vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
 		std::shared_ptr<gn::Shape> shape2 = std::make_shared<gn::Shape>(points, gn::Color(1, 0, 0));
 
-		gn::Transform t = transform;
+		gn::Transform t = children[0]->transform;
 		t.scale = .5f;
 		std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(t, shape2, 600.0f);
 		projectile->tag = "Player";
 		scene->AddActor(std::move(projectile));
 	}
-
-	transform.Update();
 
 }
 
