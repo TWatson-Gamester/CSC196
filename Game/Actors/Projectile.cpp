@@ -14,7 +14,7 @@ void Projectile::Update(float dt) {
 	transform.position.x = gn::Wrap(transform.position.x, 0.0f, 800.0f);
 	transform.position.y = gn::Wrap(transform.position.y, 0.0f, 600.0f);
 
-	std::vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue, gn::Color::orange, gn::Color::purple, gn::Color::cyan, gn::Color::yellow };
-	scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 10, .25f, colors[gn::RandomRangeInt(0, colors.size())], 150);
+	/*std::vector<gn::Color> colors = { gn::Color::white, gn::Color::red, gn::Color::green, gn::Color::blue, gn::Color::orange, gn::Color::purple, gn::Color::cyan, gn::Color::yellow };
+	scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 10, .25f, colors[gn::RandomRangeInt(0, colors.size())], 150);*/
 
 }

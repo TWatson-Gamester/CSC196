@@ -28,6 +28,7 @@ namespace gn {
 		void Draw(Core::Graphics& graphics) override;
 
 		void Create(const Vector2& position, size_t count, float lifespan, const Color& color, float speed);
+		void Create(const Vector2& position, size_t count, float lifespan, const std::vector<Color>& colors, float speed, float angle, float angleRange);
 
 	private:
 		std::vector<Particle> particles;

@@ -78,7 +78,7 @@ namespace gn {
 	}
 
 	inline Vector2 Vector2::Normalized() const {
-		return *this / Length();
+		return (Length() != 0) ? *this / Length() : Vector2::zero;
 	}
 
 	inline void Vector2::Normalize() {
