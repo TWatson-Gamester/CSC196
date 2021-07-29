@@ -103,10 +103,16 @@ void Game::Draw(Core::Graphics& graphics){
 	case Game::eState::GameOver:
 		graphics.SetColor(gn::Color::red);
 		graphics.DrawString(370, 300 + static_cast<int>(std::sin(stateTimer * 2) * 50), "GAME OVER");
+		if (score > HighScore) {
+ 			graphics.DrawString(350, 20, "HIGHSCORE!!!");
+		}
 		break;
 	case Game::eState::GameWin:
 		graphics.SetColor(gn::Color::red);
 		graphics.DrawString(370, 300 + static_cast<int>(std::sin(stateTimer * 2) * 50), "YOU WIN!");
+		if (score > HighScore) {
+			graphics.DrawString(350, 20, "HIGHSCORE!!!");
+		}
 		break;
 	default:
 		break;
