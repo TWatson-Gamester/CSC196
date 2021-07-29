@@ -46,4 +46,5 @@ private:
 	size_t lifeCounter = 0;
 	size_t score = 0;
 	size_t lives = 0;
+	bool waitTimer = true;
 };

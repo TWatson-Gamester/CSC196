@@ -54,6 +54,10 @@ void Game::Update(float dt){
 		}
 		break;
 	case Game::eState::GameOver:
+		if (waitTimer) {
+			stateTimer = 0;
+			waitTimer = false;
+		}
 		scene->RemoveAllActors();
 		if (stateTimer >= 5) {
 			if (score > HighScore) HighScore = score;
@@ -62,6 +66,10 @@ void Game::Update(float dt){
 		}
 		break;
 	case Game::eState::GameWin:
+		if (waitTimer) {
+			stateTimer = 0;
+			waitTimer = false;
+		}
 		scene->RemoveAllActors();
 		if (stateTimer >= 5) {
 			if (score > HighScore) HighScore = score;
@@ -132,6 +140,7 @@ void Game::UpdateLevelStart(float dt){
 		scene->AddActor(std::make_unique<Asteroid>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 2.0f }, engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("LargeAsteroid.txt"), 10.0f, "Large"));
 	}
 	stateTimer = 0;
+	waitTimer = true;
 	state = eState::Game;
 }
 
