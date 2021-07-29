@@ -13,6 +13,8 @@ namespace gn {
 		if (shape) {
 			shape->Draw(graphics, transform);
 		}
+
+		std::for_each(children.begin(), children.end(), [graphics](auto& child) mutable { if (child->shape) child->shape->Draw(graphics, child->transform); });
 	}
 
 	void Actor::AddChild(std::unique_ptr<Actor> actor){

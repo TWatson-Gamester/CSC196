@@ -46,6 +46,10 @@ void Game::Update(float dt){
 		if (scene->GetActors<Enemy>().size() == 0) {
 			state = eState::GameOver;
 		}
+		if (stateTimer >= 5) {
+			scene->AddActor(std::make_unique<Enemy>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 3.0f }, engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("EnemyShape.txt"), 50.0f));
+			stateTimer = 0;
+		}
 		break;
 	case Game::eState::GameOver:
 		scene->RemoveAllActors();
@@ -95,16 +99,13 @@ void Game::UpdateTitle(float dt){
 	}
 }
 
-void Game::UpdateLevelStart(float dt){ //Need to make an enemy shape an then use the ResourceSystem to add it
-
-	std::vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
-	std::shared_ptr<gn::Shape> enemyShape = std::make_shared<gn::Shape>(points, gn::Color(1, 0, 0));
-
+void Game::UpdateLevelStart(float dt){
 
 	scene->AddActor(std::make_unique<Player>(gn::Transform{ {400,300},0.0f, 5.0f }, engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("PlayerShape.txt"), 300.0f));
-	for (size_t i = 0; i < 20; i++) {
-		scene->AddActor(std::make_unique<Enemy>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 0.5f }, enemyShape, 100.0f));
+	for (size_t i = 0; i < 2; i++) {
+		scene->AddActor(std::make_unique<Enemy>(gn::Transform{ {gn::RandomRange(0,800),gn::RandomRange(0,600) }, gn::RandomRange(0, 800), 3.0f }, engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("EnemyShape.txt"), 50.0f));
 	}
+	stateTimer = 0;
 	state = eState::Game;
 }
 

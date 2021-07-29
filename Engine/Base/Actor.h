@@ -14,6 +14,8 @@ namespace gn {
 		Actor() {};
 		Actor(const Transform& transform, std::shared_ptr<Shape> shape) : transform{ transform }, shape{ shape } {};
 
+		virtual void Initialize() {}
+
 		virtual void Update(float dt);
 		virtual void Draw(Core::Graphics& graphics);
 

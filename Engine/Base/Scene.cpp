@@ -43,6 +43,7 @@ namespace gn {
 
 	void Scene::AddActor(std::unique_ptr<Actor> actor) {
 		actor.get()->scene = this;
+		actor->Initialize();
 		newActors.push_back(std::move(actor));
 	}
 

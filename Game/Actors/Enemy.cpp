@@ -20,12 +20,12 @@ void Enemy::Update(float dt) {
 		if (fireTimer <= 0 && angle <= gn::DegToRad(15)) {
 			scene->engine->Get<gn::AudioSystem>()->PlayAudio("Enemy_Shot");
 			fireTimer = fireRate;
-			std::vector<gn::Vector2> points = { {-25,-25}, {-25,25}, {25,25}, {25,-25}, {-25,-25} };
-			std::shared_ptr<gn::Shape> shape2 = std::make_shared<gn::Shape>(points, gn::Color(1, 0, 0));
-
 			gn::Transform t = transform;
 			t.scale = .5f;
-			scene->AddActor(std::make_unique<Projectile>(t, shape2, 600.0f));
+
+			std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(t, scene->engine->Get<gn::ResourceSystem>()->Get<gn::Shape>("ProjectileShape.txt"), 600.0f);
+			projectile->tag = "Enemy";
+			scene->AddActor(std::move(projectile));
 		}
 	}
 
