@@ -4,6 +4,7 @@
 #include "Actors/Player.h"
 #include "Actors/Projectile.h"
 #include "Actors/Enemy.h"
+#include "Actors/Asteroid.h"
 
 #include <memory>
 
@@ -15,7 +16,8 @@ public:
 		StartGame,
 		StartLevel,
 		Game,
-		GameOver
+		GameOver,
+		GameWin
 	};
 
 public:
@@ -40,6 +42,8 @@ public:
 private:
 	eState state = eState::TitleScreen;
 	float stateTimer = 0.0f;
+	size_t HighScore = 0;
+	size_t lifeCounter = 0;
 	size_t score = 0;
 	size_t lives = 0;
 };

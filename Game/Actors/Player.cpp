@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Projectile.h"
 #include "Enemy.h"
+#include "Asteroid.h"
 #include "Engine.h"
 
 Player::Player(const gn::Transform& transform, std::shared_ptr<gn::Shape> shape, float speed) : gn::Actor{ transform,shape }, speed{ speed } {
@@ -46,7 +47,7 @@ void Player::Update(float dt){
 
 void Player::OnCollision(Actor* actor) {
 
-	if (dynamic_cast<Enemy*>(actor)) {
+	if (dynamic_cast<Enemy*>(actor) || dynamic_cast<Asteroid*>(actor)) {
 		actor->destroy = true;
 		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::orange, 150);
 		scene->engine->Get<gn::ParticleSystem>()->Create(transform.position, 100, 1, gn::Color::red, 150);
